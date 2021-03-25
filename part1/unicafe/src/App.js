@@ -1,6 +1,11 @@
 import React, { useState } from 'react';
 
-const Statistics = ({good, neutral, bad}) => {
+const Button = ({ handleClick, text }) => <button onClick={handleClick}>{text}</button>;
+
+const Statistic = ({ text, value }) => <p>{text} {value}</p>;
+
+const Statistics = ({ feedback }) => {
+  const {good, neutral, bad} = feedback;
   const hasFeedback = good > 0 || neutral > 0 || bad > 0;
   
   if (!hasFeedback) {
@@ -15,29 +20,36 @@ const Statistics = ({good, neutral, bad}) => {
 
   return (
     <div>
-      <p>good {good}</p>
-      <p>neutral {neutral}</p>
-      <p>bad {bad}</p>
-      <p>All {total}</p>
-      <p>average {average}</p>
-      <p>positive {positive}%</p>
+      <Statistic text="good" value={good} />
+      <Statistic text="neutral" value={neutral} />
+      <Statistic text="bad" value={bad} />
+      <Statistic text="all" value={total} />
+      <Statistic text="average" value={average} />
+      <Statistic text="positive" value={`${positive}%`} />
     </div>
   );
 };
 
 const App = () => {
-  const [good, setGood] = useState(0);
-  const [neutral, setNeutral] = useState(0);
-  const [bad, setBad] = useState(0);
+  const initFeedback = {
+    good: 0,
+    neutral: 0,
+    bad: 0
+  };
+  const [feedback, setFeedback] = useState(initFeedback);
+
+  const handleGoodClick = () => setFeedback({...feedback, good: feedback.good + 1});
+  const handleNeutralClick = () => setFeedback({...feedback, neutral: feedback.neutral + 1});
+  const handleBadClick = () => setFeedback({...feedback, bad: feedback.bad + 1});
 
   return (
     <div>
       <h1>give feedback</h1>
-      <button onClick={() => setGood(good + 1)}>good</button>
-      <button onClick={() => setNeutral(neutral + 1)}>neutral</button>
-      <button onClick={() => setBad(bad + 1)}>bad</button>
+      <Button handleClick={handleGoodClick} text="good" />
+      <Button handleClick={handleNeutralClick} text="neutral" />
+      <Button handleClick={handleBadClick} text="bad" />
       <h1>statistics</h1>
-      <Statistics good={good} neutral={neutral} bad={bad} />
+      <Statistics feedback={feedback} />
     </div>
   )
 };
