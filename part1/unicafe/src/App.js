@@ -1,18 +1,28 @@
 import React, { useState } from 'react';
 
 const Statistics = ({good, neutral, bad}) => {
+  const hasFeedback = good > 0 || neutral > 0 || bad > 0;
+  
+  if (!hasFeedback) {
+    return (
+      <p>No feedback given</p>
+    );
+  }
+
   const total = good + neutral + bad;
   const average = ((good * 1) + (neutral * 0) + (bad * -1)) / total;
   const positive = (good / total) * 100;
 
-  return [
-      <p>good {good}</p>,
-      <p>neutral {neutral}</p>,
-      <p>bad {bad}</p>,
-      <p>All {total}</p>,
-      <p>average {average}</p>,
+  return (
+    <div>
+      <p>good {good}</p>
+      <p>neutral {neutral}</p>
+      <p>bad {bad}</p>
+      <p>All {total}</p>
+      <p>average {average}</p>
       <p>positive {positive}%</p>
-  ];
+    </div>
+  );
 };
 
 const App = () => {
