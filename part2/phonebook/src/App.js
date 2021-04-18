@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import Filter from './Filter';
+import PersonForm from './PersonForm';
+import Persons from './Persons';
 
 const App = () => {
   const [ persons, setPersons ] = useState([
@@ -23,7 +26,7 @@ const App = () => {
     setTextFilter(event.target.value);
   };
 
-  const addName = (event) => {
+  const addPerson = (event) => {
     event.preventDefault();
     const personObject = {
       name: newName,
@@ -46,23 +49,17 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <div>
-        filter shown with: <input value={textFilter} onChange={handleTextFilterChange} />
-      </div>
+      <Filter text={textFilter} handleChange={handleTextFilterChange} />
       <h2>Add a new</h2>
-      <form onSubmit={addName}>
-        <div>
-          name: <input value={newName} onChange={handleNameChange} />
-        </div>
-        <div>
-          number: <input value={newNumber} onChange={handleNumberChange} />
-        </div>
-        <div>
-          <button type="submit">add</button>
-        </div>
-      </form>
+      <PersonForm
+        name={newName}
+        number={newNumber}
+        handleNameChange={handleNameChange}
+        handleNumberChange={handleNumberChange}
+        handleSubmit={addPerson}
+      />
       <h2>Numbers</h2>
-      {personsToShow.map(person => <p key={person.name}>{person.name} {person.number}</p>)}
+      <Persons persons={personsToShow} />
     </div>
   );
 };
