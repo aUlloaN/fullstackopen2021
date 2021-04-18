@@ -58,7 +58,7 @@ const App = () => {
       <h1>statistics</h1>
       <Statistics feedback={feedback} />
     </div>
-  )
+  );
 };
 
 export default App;

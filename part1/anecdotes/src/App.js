@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
 const App = () => {
   const anecdotes = [
@@ -10,7 +10,7 @@ const App = () => {
     'Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it.'
   ];
   const initVotes = Array(anecdotes.length).fill(0);
-   
+
   const [selected, setSelected] = useState(0);
   const [votes, setVotes] = useState(initVotes);
 
@@ -51,7 +51,7 @@ const App = () => {
       <p>{anecdotes[getIndexMostVoted()]}</p>
       <p>has {votes[getIndexMostVoted()]} votes</p>
     </div>
-  )
+  );
 };
 
 export default App;
