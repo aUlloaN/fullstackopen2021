@@ -16,7 +16,7 @@ const App = () => {
       .then(response => {
         const data = response.data;
         setPersons(data);
-      })
+      });
   }, []);
 
   const handleNameChange = (event) => {
