@@ -10,10 +10,10 @@ const App = () => {
   const [ countrySelected, setCountrySelected ] = useState(null);
 
   useEffect(() => {
-    const url = `https://restcountries.eu/rest/v2/${textFilter ? `name/${textFilter}` : 'all'}?fields=name;capital;population;languages;flag`;
+    const endpointUrl = `https://restcountries.eu/rest/v2/${textFilter ? `name/${textFilter}` : 'all'}?fields=name;capital;population;languages;flag`;
     
     axios
-      .get(url)
+      .get(endpointUrl)
       .then(response => {
         setCountries(response.data);
       }, () => {
