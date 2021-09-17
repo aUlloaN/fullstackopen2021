@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import Filter from './Filter';
 import PersonForm from './PersonForm';
 import Persons from './Persons';
-
-const baseUrl = 'http://localhost:3001/persons';
+import PersonService from './services/persons';
 
 const App = () => {
   const [ persons, setPersons ] = useState([]);
@@ -13,11 +11,11 @@ const App = () => {
   const [ textFilter, setTextFilter ] = useState('');
 
   useEffect(() => {
-    axios
-      .get(baseUrl)
-      .then(response => {
-        setPersons(response.data);
-      });
+    PersonService
+      .getAll()
+      .then(initialPersons => {
+        setPersons(initialPersons);
+      })
   }, []);
 
   const handleNameChange = (event) => {
@@ -44,10 +42,10 @@ const App = () => {
       setNewName('');
       setNewNumber('');
     } else {
-      axios
-        .post(baseUrl, personObject)
-        .then(response => {
-          setPersons(persons.concat(response.data));
+      PersonService
+        .create(personObject)
+        .then(newPerson => {
+          setPersons(persons.concat(newPerson));
           setNewName('');
           setNewNumber('');
         });
