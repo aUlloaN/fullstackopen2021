@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Filter from './Filter';
+import Notification from './Notification';
 import PersonForm from './PersonForm';
 import Persons from './Persons';
 import PersonService from './services/persons';
@@ -9,6 +10,8 @@ const App = () => {
   const [ newName, setNewName ] = useState('');
   const [ newNumber, setNewNumber ] = useState('');
   const [ textFilter, setTextFilter ] = useState('');
+  const [ notificationMessage, setNotificationMessage ] = useState(null);
+  const [ notificationState, setNotificationState ] = useState('');
 
   useEffect(() => {
     PersonService
@@ -30,6 +33,15 @@ const App = () => {
     setTextFilter(event.target.value);
   };
 
+  const handleNotification = (message, state) => {
+    setNotificationMessage(message);
+    setNotificationState(state);
+    setTimeout(() => {
+      setNotificationMessage(null);
+      setNotificationState('');
+    }, 4000);
+  };
+
   const addPerson = (event) => {
     event.preventDefault();
     const personObject = {
@@ -43,6 +55,7 @@ const App = () => {
         PersonService
           .update(personFound.id, personObject)
           .then(returnedPerson => {
+            handleNotification(`${personObject.name} was updated`, 'successful');
             setPersons(persons.map(person => person.id !== personFound.id ? person : returnedPerson));
             setNewName('');
             setNewNumber('');
@@ -52,6 +65,7 @@ const App = () => {
       PersonService
         .create(personObject)
         .then(newPerson => {
+          handleNotification(`${personObject.name} was deleted`, 'successful');
           setPersons(persons.concat(newPerson));
           setNewName('');
           setNewNumber('');
@@ -59,14 +73,14 @@ const App = () => {
     }
   };
 
-  const deletePerson = (data) => {
-    const resp = window.confirm(`Delete ${data.name}?`);
+  const deletePerson = (personObject) => {
+    const resp = window.confirm(`Delete ${personObject.name}?`);
     if (resp) {
       PersonService
-        .delete(data.id)
+        .delete(personObject.id)
         .then(() => {
-          window.alert(`${data.name} was eliminated.`);
-          setPersons(persons.filter(person => person.id !== data.id));
+          handleNotification(`${personObject.name} was eliminated`, 'successful');
+          setPersons(persons.filter(person => person.id !== personObject.id));
         })
     }
   }
@@ -78,6 +92,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} state={notificationState} />
       <Filter text={textFilter} handleChange={handleTextFilterChange} />
       <h2>Add a new</h2>
       <PersonForm
