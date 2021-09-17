@@ -18,7 +18,7 @@ const App = () => {
       .getAll()
       .then(initialPersons => {
         setPersons(initialPersons);
-      })
+      });
   }, []);
 
   const handleNameChange = (event) => {
@@ -60,6 +60,10 @@ const App = () => {
             setNewName('');
             setNewNumber('');
           })
+          .catch(error => {
+            handleNotification(`Information of '${personFound.name}' has already been removed from server`, 'error');
+            setPersons(persons.filter(person => person.id !== personFound.id));
+          });
       }
     } else {
       PersonService
@@ -81,7 +85,7 @@ const App = () => {
         .then(() => {
           handleNotification(`${personObject.name} was eliminated`, 'successful');
           setPersons(persons.filter(person => person.id !== personObject.id));
-        })
+        });
     }
   }
 
