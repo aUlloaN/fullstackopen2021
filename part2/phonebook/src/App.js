@@ -4,6 +4,8 @@ import Filter from './Filter';
 import PersonForm from './PersonForm';
 import Persons from './Persons';
 
+const baseUrl = 'http://localhost:3001/persons';
+
 const App = () => {
   const [ persons, setPersons ] = useState([]);
   const [ newName, setNewName ] = useState('');
@@ -12,10 +14,9 @@ const App = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:3001/persons')
+      .get(baseUrl)
       .then(response => {
-        const data = response.data;
-        setPersons(data);
+        setPersons(response.data);
       });
   }, []);
 
@@ -40,11 +41,17 @@ const App = () => {
     const personFound = persons.find(person => person.name.trim() === personObject.name.trim());
     if (personFound) {
       alert(`${personFound.name} is already added to phonebook`);
+      setNewName('');
+      setNewNumber('');
     } else {
-      setPersons(persons.concat(personObject));
+      axios
+        .post(baseUrl, personObject)
+        .then(response => {
+          setPersons(persons.concat(response.data));
+          setNewName('');
+          setNewNumber('');
+        });
     }
-    setNewName('');
-    setNewNumber('');
   };
 
   const personsToShow = textFilter.trim().length > 0
