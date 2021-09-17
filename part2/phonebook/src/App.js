@@ -52,6 +52,18 @@ const App = () => {
     }
   };
 
+  const deletePerson = (data) => {
+    const resp = window.confirm(`Delete ${data.name}?`);
+    if (resp) {
+      PersonService
+        .delete(data.id)
+        .then(() => {
+          window.alert(`${data.name} was eliminated.`);
+          setPersons(persons.filter(person => person.id !== data.id));
+        })
+    }
+  }
+
   const personsToShow = textFilter.trim().length > 0
     ? persons.filter(person => person.name.toLowerCase().indexOf(textFilter.trim().toLowerCase()) > -1)
     : persons;
@@ -69,7 +81,7 @@ const App = () => {
         handleSubmit={addPerson}
       />
       <h2>Numbers</h2>
-      <Persons persons={personsToShow} />
+      <Persons persons={personsToShow} handleDelete={deletePerson} />
     </div>
   );
 };
