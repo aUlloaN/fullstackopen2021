@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseUrl = 'https://ancient-forest-42161.herokuapp.com/api/persons';
+const baseUrl = '/api/persons';
 
 const PersonService = {
   getAll: () => {
